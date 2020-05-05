@@ -12,7 +12,6 @@ import sys
 import time
 import geoip2.database
 import Geohash
-import configparser
 from influxdb import InfluxDBClient
 from IPy import IP as ipadd
 
@@ -69,22 +68,18 @@ def logparse(LOGPATH, INFLUXHOST, INFLUXPORT, INFLUXDBDB, INFLUXUSER, INFLUXUSER
                         # Sending json data to InfluxDB
                         CLIENT.write_points(METRICS)
 
-
 def main():
-    # Preparing for reading config file
-    PWD = os.path.abspath(os.path.dirname(os.path.realpath(__file__)))
-    CONFIG = configparser.ConfigParser()
-    CONFIG.read('%s/settings.ini' % PWD)
 
-    # Getting params from config
-    GEOIPDB = CONFIG.get('GEOIP', 'geoipdb')
-    LOGPATH = CONFIG.get('NGINX_LOG', 'logpath')
-    INFLUXHOST = CONFIG.get('INFLUXDB', 'host')
-    INFLUXPORT = CONFIG.get('INFLUXDB', 'port')
-    INFLUXDBDB = CONFIG.get('INFLUXDB', 'database')
-    INFLUXUSER = CONFIG.get('INFLUXDB', 'username')
-    MEASUREMENT = CONFIG.get('INFLUXDB', 'measurement')
-    INFLUXUSERPASS = CONFIG.get('INFLUXDB', 'password')
+    # Getting params from envs
+    GEOIPDB = os.getenv('GEOIP_DB_PATH', '/config/geolite2/Geolite2-City.mmdb')
+    LOGPATH = os.getenv('NGINX_LOG_PATH', '/config/log/nginx/access.log')
+    INFLUXHOST = os.getenv('INFLUX_HOST', '127.0.0.1')
+    INFLUXPORT = os.getenv('INFLUX_HOST_PORT', '8086')
+    INFLUXDBDB = os.getenv('INFLUX_DATABASE', 'telegraf')
+    INFLUXUSER = os.getenv('INFLUX_USER', 'root')
+    INFLUXUSERPASS = os.getenv('INFLUX_PASS', 'root')
+    MEASUREMENT = os.getenv('INFLUXDB', 'geoip2influx')
+    
 
     # Parsing log file and sending metrics to Influxdb
     while True:

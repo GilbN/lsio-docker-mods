@@ -1,0 +1,23 @@
+#!/usr/bin/with-contenv bash
+
+if [ ! -d /usr/lib/python3.8/site-packages/influxdb ]; then
+
+  pip3 install --no-cache-dir -U \
+    geoip2 \
+    Geohash \
+    influxdb \
+    IPy 
+fi
+
+if [ ! -f /config/geoip2influx/geoip2influx.py ]; then
+  mkdir /config/geoip2influx
+  cp /geoip2-mod/geoip2influx.py /config/geoip2influx/
+  chmod +x /config/geoip2influx/geoip2influx.py
+fi
+
+# test=$(python3 /config/fail2ban/Fail2Ban.py -a test)
+# if [[ ${test} = 404 ]]; then
+#   echo 'Notifier might not work'
+# elif [[ ${test} = 204 ]]; then
+#   echo 'Notifier works'
+# fi
