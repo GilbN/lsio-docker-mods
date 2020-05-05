@@ -11,7 +11,7 @@ import re
 import sys
 import time
 import geoip2.database
-import Geohash
+import geohash2
 from influxdb import InfluxDBClient
 from IPy import IP as ipadd
 
@@ -52,10 +52,10 @@ def logparse(LOGPATH, INFLUXHOST, INFLUXPORT, INFLUXDBDB, INFLUXUSER, INFLUXUSER
                     m = re_IPV6.match(LINE)
                     IP = m.group(1)
 
-                if ipadd(IP).iptype() == 'PUBLIC'  and IP:
+                if ipadd(IP).iptype() == 'PUBLIC' and IP:
                     INFO = GI.city(IP)
                     if INFO is not None:
-                        HASH = Geohash.encode(INFO.location.latitude, INFO.location.longitude) # NOQA
+                        HASH = geohash2.encode(INFO.location.latitude, INFO.location.longitude) # NOQA
                         COUNT['count'] = 1
                         GEOHASH['geohash'] = HASH
                         GEOHASH['host'] = HOSTNAME
@@ -67,11 +67,12 @@ def logparse(LOGPATH, INFLUXHOST, INFLUXPORT, INFLUXDBDB, INFLUXUSER, INFLUXUSER
 
                         # Sending json data to InfluxDB
                         CLIENT.write_points(METRICS)
+                        time.sleep(10)
+
 
 def main():
-
     # Getting params from envs
-    GEOIPDB = os.getenv('GEOIP_DB_PATH', '/config/geolite2/Geolite2-City.mmdb')
+    GEOIPDB = os.getenv('GEOIP_DB_PATH', '/config/geolite2/GeoLite2-City.mmdb')
     LOGPATH = os.getenv('NGINX_LOG_PATH', '/config/log/nginx/access.log')
     INFLUXHOST = os.getenv('INFLUX_HOST', '127.0.0.1')
     INFLUXPORT = os.getenv('INFLUX_HOST_PORT', '8086')
@@ -79,7 +80,6 @@ def main():
     INFLUXUSER = os.getenv('INFLUX_USER', 'root')
     INFLUXUSERPASS = os.getenv('INFLUX_PASS', 'root')
     MEASUREMENT = os.getenv('INFLUXDB', 'geoip2influx')
-    
 
     # Parsing log file and sending metrics to Influxdb
     while True:
