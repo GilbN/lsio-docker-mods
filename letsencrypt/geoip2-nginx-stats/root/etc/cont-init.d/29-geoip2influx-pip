@@ -17,9 +17,6 @@ if [ ! -f /config/geoip2influx/geoip2influx.py ]; then
   cp /geoip2-mod/geoip2influx.py /config/geoip2influx/
   chmod +x /config/geoip2influx/geoip2influx.py
 fi
-
-python3 /config/geoip2influx/geoip2influx.py
-
 # test=$(python3 /config/fail2ban/Fail2Ban.py -a test)
 # if [[ ${test} = 404 ]]; then
 #   echo 'Notifier might not work'
