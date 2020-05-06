@@ -5,6 +5,8 @@
 # Parts added by Remko Lodder, 2019.
 # Added: IPv6 matching, make query based on geoip2 instead of
 # geoip, which is going away r.s.n.
+# GilbN 2020: Adapted to Python 3 and changed config to use enviroment variables.
+# And added more metrics.
 
 import os
 import re
@@ -86,7 +88,7 @@ def main():
     INFLUXDBDB = os.getenv('INFLUX_DATABASE', 'telegraf')
     INFLUXUSER = os.getenv('INFLUX_USER', 'root')
     INFLUXUSERPASS = os.getenv('INFLUX_PASS', 'root')
-    MEASUREMENT = os.getenv('INFLUXDB', 'geoip2influx')
+    MEASUREMENT = os.getenv('MEASUREMENT', 'geoip2influx')
 
     # Parsing log file and sending metrics to Influxdb
     while True:
