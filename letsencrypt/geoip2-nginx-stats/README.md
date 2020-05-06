@@ -21,5 +21,8 @@ Add `-e DOCKER_MODS=gilbn/lsio-docker-mods:geoip2-nginx-stats`
 -e INFLUX_PASS=root
 -e MEASUREMENT=geoip2influx
  ```
+ You will need to download the Geolite2 database. (May add some variables for the licensekey and a cronjob for updating in the future)
+ 
+See here on how to download it, and add geoblocking if you feel like it. (Not needed for this mod) https://technicalramblings.com/blog/blocking-countries-with-geolite2-using-the-letsencrypt-docker-container/
  
  Temporary grafana dashboard: https://gist.github.com/gilbN/e7137df65b7e33dba4f762e5c57ffcf4
