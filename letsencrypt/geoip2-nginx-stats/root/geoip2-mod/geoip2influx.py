@@ -60,6 +60,13 @@ def logparse(LOGPATH, INFLUXHOST, INFLUXPORT, INFLUXDBDB, INFLUXUSER, INFLUXUSER
                         GEOHASH['geohash'] = HASH
                         GEOHASH['host'] = HOSTNAME
                         GEOHASH['country_code'] = INFO.country.iso_code
+                        GEOHASH['country_name'] = INFO.country.name
+                        GEOHASH['state'] = INFO.subdivisions.most_specific.name
+                        GEOHASH['state_code'] = INFO.subdivisions.most_specific.iso_code
+                        GEOHASH['city'] = INFO.city.name
+                        GEOHASH['postal_code'] = INFO.postal.code
+                        GEOHASH['latitude'] = INFO.location.latitude
+                        GEOHASH['longitude'] = INFO.location.longitude
                         IPS['tags'] = GEOHASH
                         IPS['fields'] = COUNT
                         IPS['measurement'] = MEASUREMENT
