@@ -12,14 +12,11 @@ if [ ! -d /usr/lib/python3.8/site-packages/influxdb ]; then
     IPy 
 fi
 
-if [ ! -f /config/geoip2influx/geoip2influx.py ]; then
-  mkdir /config/geoip2influx
-  cp /geoip2-mod/geoip2influx.py /config/geoip2influx/
-  chmod +x /config/geoip2influx/geoip2influx.py
+if [ ! -f /config/geoip2db ]; then
+  mkdir /config/geoip2db
 fi
-# test=$(python3 /config/fail2ban/Fail2Ban.py -a test)
-# if [[ ${test} = 404 ]]; then
-#   echo 'Notifier might not work'
-# elif [[ ${test} = 204 ]]; then
-#   echo 'Notifier works'
-# fi
+echo '------------------------------------------------------------------------'
+echo '| Copying geoip2influx.py to /config/geoip2db/'
+echo '------------------------------------------------------------------------'
+cp /geoip2-mod/geoip2influx.py /config/geoip2db/
+chmod +x /config/geoip2db/geoip2influx.py
