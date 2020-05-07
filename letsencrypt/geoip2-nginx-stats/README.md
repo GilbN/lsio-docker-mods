@@ -13,7 +13,7 @@ Add `-e DOCKER_MODS=gilbn/lsio-docker-mods:geoip2-nginx-stats`
 ## Enviroment variables:
 
 These are the default values for all envs. 
-If you have telegraf and influxdb already setup you only need to add TELEGRAF_HOST
+Add the ones that differ on your system. 
 ```
 -e GEOIP_DB_PATH=/config/geoip2db/GeoLite2-City.mmdb
 -e NGINX_LOG_PATH=/config/log/nginx/access.log
