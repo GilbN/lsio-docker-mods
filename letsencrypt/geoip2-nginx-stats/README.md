@@ -6,6 +6,8 @@ A docker mod for the linuxserver/letsencrypt container adding a python script to
 
 Adapted source: https://github.com/ratibor78/geostat
 
+![](https://i.imgur.com/fYyPIZ2.png)
+
 The mod will parse the access log for IPs and and convert them into geo metrics for InfluxDB.
 
 Add `-e DOCKER_MODS=gilbn/lsio-docker-mods:geoip2-nginx-stats`
