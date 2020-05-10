@@ -8,7 +8,7 @@ Adapted source: https://github.com/ratibor78/geostat
 
 ![](https://i.imgur.com/fYyPIZ2.png)
 
-The mod will parse the access log for IPs and and convert them into geo metrics for InfluxDB.
+The mod will parse the access log for IPs and and convert them into geo metrics for InfluxDB it will also send log metrics in enabled.
 
 Add `-e DOCKER_MODS=gilbn/lsio-docker-mods:geoip2-nginx-stats`
 
@@ -19,15 +19,18 @@ Add the ones that differ on your system.
 ```
 -e GEOIP_DB_PATH=/config/geoip2db/GeoLite2-City.mmdb
 -e NGINX_LOG_PATH=/config/log/nginx/access.log
--e INFLUX_HOST=127.0.0.1
+-e INFLUX_HOST=localhost
 -e INFLUX_HOST_PORT=8086
--e INFLUX_DATABASE=telegraf
+-e INFLUX_DATABASE=geoip2influx
 -e INFLUX_USER=root
 -e INFLUX_PASS=root
--e MEASUREMENT=geoip2influx
+-e GEO_MEASUREMENT=geoip2influx
+-e LOG_MEASUREMENT=nginx_access_logs
+-e SEND_NGINX_LOGS=true
+-e GEOIP2_KEY=
  ```
- You will need to download the Geolite2 database. (May add some variables for the licensekey and a cronjob for updating in the future)
+If `-e GEOIP2_KEY`is blank it will skip downloading the database.
+
+The database will be created automatically.
  
-See here on how to download it, and add geoblocking if you feel like it. (Not needed for this mod) https://technicalramblings.com/blog/blocking-countries-with-geolite2-using-the-letsencrypt-docker-container/
- 
- Temporary grafana dashboard: https://gist.github.com/gilbN/e7137df65b7e33dba4f762e5c57ffcf4
+Temporary grafana dashboard: https://gist.github.com/gilbN/e7137df65b7e33dba4f762e5c57ffcf4
