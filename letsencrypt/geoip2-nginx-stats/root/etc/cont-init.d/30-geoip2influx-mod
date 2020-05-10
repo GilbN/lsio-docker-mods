@@ -1,0 +1,61 @@
+#!/usr/bin/with-contenv bash
+
+if [ ! -d /usr/lib/python3.8/site-packages/influxdb ]; then
+  echo '------------------------------------------------------------------------'
+  echo '| Mod by Gilbn'
+  echo '| Running installation of required modules for geoip2influx'
+  echo '------------------------------------------------------------------------'
+  pip3 install --no-cache-dir -U \
+    geoip2 \
+    geohash2 \
+    influxdb \
+    IPy 
+fi
+
+if [ ! -d /config/geoip2db ]; then
+    echo '------------------------------------------------------------------------'
+    echo '| Creating /config/geoip2db/ folder'
+    echo '------------------------------------------------------------------------'
+    mkdir  /config/geoip2db
+fi
+
+echo '------------------------------------------------------------------------'
+echo '| Copying geoip2influx.py to /config/geoip2db/'
+echo '------------------------------------------------------------------------'
+cp /geoip2-mod/geoip2influx.py /config/geoip2db/
+chmod +x /config/geoip2db/geoip2influx.py
+
+# Setting the default Geoip2 db path
+GEOIP_DB_PATH=${GEOIP_DB_PATH:-/config/geoip2db/GeoLite2-City.mmdb}
+# Display variables for troubleshooting
+echo -e "Variables set:\\n\
+GEOIP2_KEY=${GEOIP2_KEY}\\n\
+GEOIP_DB_PATH=${GEOIP_DB_PATH}\\n\
+NGINX_LOG_PATH=${NGINX_LOG_PATH}\\n\
+INFLUX_HOST=${INFLUX_HOST}\\n\
+INFLUX_HOST_PORT=${INFLUX_HOST_PORT}\\n\
+INFLUX_DATABASE=${INFLUX_DATABASE}\\n\
+INFLUX_USER=${INFLUX_USER}\\n\
+INFLUX_PASS=${INFLUX_PASS}\\n\
+GEO_MEASUREMENT=${GEO_MEASUREMENT}\\n\
+LOG_MEASUREMENT=${LOG_MEASUREMENT}\\n\
+SEND_NGINX_LOGS=${SEND_NGINX_LOGS}\\n"
+
+if [ -z "$GEOIP2_KEY" ]; then
+  echo "GEOIP2_KEY is NULL, skipping downloading of geoip2 database"
+else
+  echo '------------------------------------------------------------------------'
+  echo '| Updating tar package..'
+  echo '------------------------------------------------------------------------'
+  apk --update add tar
+  echo '------------------------------------------------------------------------'
+  echo '| Downloading geoip2 database..'
+  echo '------------------------------------------------------------------------'
+  wget -O /tmp/GeoLite2-City.tar.gz "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key=${GEOIP2_KEY}&suffix=tar.gz"
+  tar -xvf /tmp/GeoLite2-City.tar.gz -C /tmp/ --wildcards "*.mmdb" --strip 1
+  echo '------------------------------------------------------------------------'
+  echo "| Copying geoip2 database to ${GEOIP_DB_PATH}"
+  echo '------------------------------------------------------------------------'
+  mv /tmp/GeoLite2-City.mmdb $GEOIP_DB_PATH
+  chown abc:abc $GEOIP_DB_PATH
+fi
