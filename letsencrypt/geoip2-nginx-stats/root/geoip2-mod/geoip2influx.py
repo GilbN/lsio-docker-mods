@@ -23,15 +23,32 @@ from influxdb import InfluxDBClient
 from IPy import IP as ipadd
 
 
-def regex_tester(log_path):
-    with open(log_path, "r") as log_file:
-        str_results = os.stat(log_path)
-        st_size = str_results[6]
-        log_file.seek(st_size)
-        line = log_file.readline()
-        regex = re.compile(r'(.+ "[A-Z]{2}")', re.IGNORECASE)
-        if regex.match(line):
-            return True
+def regex_tester(log_path, N):
+    time_out = time.time() + 60
+    while True:
+        assert N >= 0
+        pos = N + 1
+        lines = [] 
+        with open(log_path) as f: 
+            while len(lines) <= N: 
+                try: 
+                    f.seek(-pos, 2) 
+                except IOError: 
+                    f.seek(0) 
+                    break
+                finally: 
+                    lines = list(f) 
+                pos *= 2
+        log_lines = lines[-N:] 
+        for line in log_lines:
+            regex = re.compile(r'(.+ "[A-Z]{2}")', re.IGNORECASE)
+            if regex.match(line):
+                return True
+            else:
+                print("Testing regex on " + log_path)
+                time.sleep(2)
+        if time.time() > time_out:
+            break
 
 def logparse(
         log_path, influxdb_host, influxdb_port, influxdb_database, influxdb_user, influxdb_user_pass, 
@@ -60,7 +77,7 @@ def logparse(
         re_ipv4 = re.compile(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})')
         re_ipv6 = re.compile(r'(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))') # NOQA
 
-    if not regex_tester(log_path):
+    if not regex_tester(log_path,3):
         if send_logs:
             re_ipv4 = re.compile(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})')
             re_ipv6 = re.compile(r'(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))') # NOQA
@@ -113,7 +130,6 @@ def logparse(
                         ips['fields'] = geohash_fields
                         ips['measurement'] = geo_measurement
                         geo_metrics.append(ips)
-                        # Sending json data to InfluxDB
                         client.write_points(geo_metrics)
                 
                 if send_logs:
@@ -149,7 +165,6 @@ def logparse(
                     nginx_log['measurement'] = log_measurement
                     log_metrics.append(nginx_log)
                     client.write_points(log_metrics)
-                    print("LOG METRICS SENT BBY!")
 
 
 def main():
