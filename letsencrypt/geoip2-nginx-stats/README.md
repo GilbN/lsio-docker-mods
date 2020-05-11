@@ -32,7 +32,7 @@ If `-e GEOIP2_KEY`is blank it will skip downloading the database.
 The database will be created automatically.
 
 ## Grafana dashboard: 
-[https://grafana.com/grafana/dashboards/12268/](https://grafana.com/grafana/dashboards/12268/)
+### [Grafana Dashboard Link](https://grafana.com/grafana/dashboards/12268/)
 
 ## Sending Nginx log metrics
 
