@@ -4,7 +4,7 @@ A docker mod for the linuxserver/letsencrypt container adding a python script to
 
 Adapted source: https://github.com/ratibor78/geostat
 
-![](https://i.imgur.com/OXf3Okl.jpg)
+![](https://i.imgur.com/YCaxwsE.jpg)
 
 The mod will parse the access log for IPs and and convert them into geo metrics for InfluxDB. It will also send log metrics if enabled.
 
