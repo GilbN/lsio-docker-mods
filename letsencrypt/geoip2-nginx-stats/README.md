@@ -29,7 +29,7 @@ Add the ones that differ on your system.
  ```
 If `-e GEOIP2_KEY`is blank it will skip downloading the database.
 
-The database will be created automatically.
+The InfluxDB database will be created automatically.
 
 ## Grafana dashboard: 
 ### [Grafana Dashboard Link](https://grafana.com/grafana/dashboards/12268/)
