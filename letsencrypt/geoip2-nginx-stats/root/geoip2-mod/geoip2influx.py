@@ -17,9 +17,11 @@ import re
 import sys
 import time
 import datetime
+
 import geoip2.database
 import geohash2
 from influxdb import InfluxDBClient
+import requests.exceptions
 from IPy import IP as ipadd
 
 
@@ -50,6 +52,24 @@ def regex_tester(log_path, N):
         if time.time() > time_out:
             break
 
+
+def file_exists(log_path,geoip_db_path):
+    time_out = time.time() + 30
+    while True:
+        if not os.path.exists(log_path):
+            print(('File %s not found' % log_path))
+            time.sleep(1)
+        if not os.path.exists(geoip_db_path):
+            print(('File %s not found' % geoip_db_path))
+            time.sleep(1)
+        file_list = [log_path, geoip_db_path]
+        if all([os.path.isfile(f) for f in file_list]):
+            return True
+        if time.time() > time_out:
+            print("Exiting")
+            break            
+
+
 def logparse(
         log_path, influxdb_host, influxdb_port, influxdb_database, influxdb_user, influxdb_user_pass, 
         geo_measurement, log_measurement, send_nginx_logs, geoip_db_path, inode):
@@ -63,7 +83,11 @@ def logparse(
     hostname = os.uname()[1]
     client = InfluxDBClient(
         host=influxdb_host, port=influxdb_port, username=influxdb_user, password=influxdb_user_pass, database=influxdb_database)
-    client.create_database(influxdb_database)
+    try:
+        client.create_database(influxdb_database)
+    except requests.exceptions.ConnectionError as e:
+        print(str(e) + "\n\n Unable to connect to InfluxDB!")
+        sys.exit(1)
     client.switch_database(influxdb_database)
     re_ipv4 = re.compile(r'(?P<ipaddress>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}) - (?P<remote_user>.+) \[(?P<dateandtime>\d{2}\/[A-Z]{1}[a-z]{2}\/\d{4}:\d{2}:\d{2}:\d{2} ((\+|\-)\d{4}))\](["](?P<method>[A-Z]{1,7})) (?P<referrer>.+) ((?P<http_version>HTTP\/[1-3]\.[0-9])["]) (?P<status_code>\d{3}) (?P<bytes_sent>\d{1,99})(["](?P<url>(\-)|(.+))["]) (["](?P<user_agent>.+)["])(["](?P<request_time>.+)["]) (["](?P<connect_time>.+)["])(["](?P<city>.+)["]) (["](?P<country_code>.+)["])', re.IGNORECASE) # NOQA
     re_ipv6 = re.compile(r'(?P<ipaddress>(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))) - (?P<remote_user>.+) \[(?P<dateandtime>\d{2}\/[A-Z]{1}[a-z]{2}\/\d{4}:\d{2}:\d{2}:\d{2} ((\+|\-)\d{4}))\](["](?P<method>[A-Z]{1,7})) (?P<referrer>.+) ((?P<http_version>HTTP\/[1-3]\.[0-9])["]) (?P<status_code>\d{3}) (?P<bytes_sent>\d{1,99})(["](?P<url>(\-)|(.+))["]) (["](?P<user_agent>.+)["])(["](?P<request_time>.+)["]) (["](?P<connect_time>.+)["])(["](?P<city>.+)["]) (["](?P<country_code>.+)["])', re.IGNORECASE) # NOQA
@@ -83,7 +107,6 @@ def logparse(
             re_ipv6 = re.compile(r'(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))') # NOQA
             send_logs = False
             print("Regex did not match nginx logs..\nNginx log metrics disabled! \nDouble check your nginx configs..")
-
 
     # Main loop to parse access.log file in tailf style with sending metrcs
     with open(log_path, "r") as log_file:
@@ -169,7 +192,7 @@ def logparse(
 
 def main():
     # Getting params from envs
-    geoip_db_path = os.getenv('GEOIP_DB_PATH', '/config/geoip2db/GeoLite2-City.mmdb')
+    geoip_db_path = '/config/geoip2db/GeoLite2-City.mmdb'
     log_path = os.getenv('NGINX_LOG_PATH', '/config/log/nginx/access.log')
     influxdb_host = os.getenv('INFLUX_HOST', 'localhost')
     influxdb_port = os.getenv('INFLUX_HOST_PORT', '8086')
@@ -181,16 +204,13 @@ def main():
     send_nginx_logs = os.getenv('SEND_NGINX_LOGS','true')
 
     # Parsing log file and sending metrics to Influxdb
-    while True:
+    while file_exists(log_path,geoip_db_path):
         # Get inode from log file
         inode = os.stat(log_path).st_ino
         # Run main loop and grep a log file
-        if os.path.exists(log_path):
-            logparse(
-                    log_path, influxdb_host, influxdb_port, influxdb_database, influxdb_user, influxdb_user_pass, 
-                    geo_measurement, log_measurement, send_nginx_logs, geoip_db_path, inode) # NOQA
-        else:
-            print(('File %s not found' % log_path))
+        logparse(
+            log_path, influxdb_host, influxdb_port, influxdb_database, influxdb_user, influxdb_user_pass, 
+            geo_measurement, log_measurement, send_nginx_logs, geoip_db_path, inode) # NOQA
 
 if __name__ == '__main__':
     try:

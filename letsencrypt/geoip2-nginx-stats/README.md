@@ -15,7 +15,6 @@ Add `-e DOCKER_MODS=gilbn/lsio-docker-mods:geoip2-nginx-stats`
 These are the **default** values for all envs. 
 Add the ones that differ on your system. 
 ```
--e GEOIP_DB_PATH=/config/geoip2db/GeoLite2-City.mmdb \
 -e NGINX_LOG_PATH=/config/log/nginx/access.log \
 -e INFLUX_HOST=localhost \
 -e INFLUX_HOST_PORT=8086 \
@@ -25,11 +24,23 @@ Add the ones that differ on your system.
 -e GEO_MEASUREMENT=geoip2influx \ # InfluxDB measurement name for geohashes
 -e LOG_MEASUREMENT=nginx_access_logs \ # InfluxDB measurement name for nginx logs
 -e SEND_NGINX_LOGS=true \
--e GEOIP2_KEY= \
- ```
-If `-e GEOIP2_KEY`is blank it will skip downloading the database.
 
-The InfluxDB database will be created automatically.
+ ```
+### MaxMind Geolite2
+
+Use: 
+```
+-e MAXMINDDB_LICENSE_KEY=<license-key>
+```
+Default download location is `/config/geoip2db/GeoLite2-City.mmdb`
+
+### InfluxDB 
+
+The InfluxDB database will be created automatically with the name you choose.
+
+```
+-e INFLUX_DATABASE=geoip2influx 
+```
 
 ## Grafana dashboard: 
 ### [Grafana Dashboard Link](https://grafana.com/grafana/dashboards/12268/)
@@ -56,3 +67,6 @@ log_format custom '$remote_addr - $remote_user [$time_local]'
  ```nginx
  access_log /config/log/nginx/access.log custom;
  ```
+
+#### Updates 
+15.05.20 - Removed `GEOIP2_KEY` and `GEOIP_DB_PATH`variables. With commit https://github.com/linuxserver/docker-letsencrypt/commit/75b9685fdb3ec6edda590300f289b0e75dd9efd0 the letsencrypt container now natively supports downloading and updating(weekly) the GeoLite2-City database!
