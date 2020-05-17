@@ -154,7 +154,7 @@ def logparse(
                         ips['measurement'] = geo_measurement
                         geo_metrics.append(ips)
                         client.write_points(geo_metrics)
-                        time.sleep(5)
+                        
                 if send_logs:
                     data = re.search(log, line)
                     try:         
@@ -188,7 +188,7 @@ def logparse(
                     nginx_log['measurement'] = log_measurement
                     log_metrics.append(nginx_log)
                     client.write_points(log_metrics)
-                    time.sleep(5)
+                time.sleep(10)
 
 
 def main():
