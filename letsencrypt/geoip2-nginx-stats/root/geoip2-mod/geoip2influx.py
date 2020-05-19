@@ -188,7 +188,6 @@ def logparse(
                     nginx_log['measurement'] = log_measurement
                     log_metrics.append(nginx_log)
                     client.write_points(log_metrics)
-                time.sleep(10)
 
 
 def main():
