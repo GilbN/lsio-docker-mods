@@ -232,9 +232,9 @@ def main():
     log_measurement = os.getenv('LOG_MEASUREMENT', 'nginx_access_logs')
     send_nginx_logs = os.getenv('SEND_NGINX_LOGS','true')
     log_level = os.getenv('GEOIP2INFLUX_LOG_LEVEL', 'INFO').upper()
-    
+
     # Logging
-    logging.basicConfig(level=log_level,format='%(asctime)s :: %(levelname)s :: %(message)s',datefmt='%d/%b/%Y %H:%M:%S',filename='geoip2influx.log')
+    logging.basicConfig(level=log_level,format='%(asctime)s :: %(levelname)s :: %(message)s',datefmt='%d/%b/%Y %H:%M:%S',filename=sys.path[0] + '/geoip2influx.log')
     # Logging envs
     logging.debug("Variables set:" +
     "\n    geoip_db_path    :: " + geoip_db_path +
