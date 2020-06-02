@@ -1,10 +1,21 @@
 # Geoip2Influx
 
+<p align="center"></a>
+
+<a href="https://discord.gg/HSPa4cz" rel="noopener"><img class="alignnone" title="Geoip2Influx!" src="https://img.shields.io/badge/chat-Discord-blue.svg?style=for-the-badge&logo=discord" alt="" height="37" />
+</a>
+<a href="https://technicalramblings.com/" rel="noopener"><img class="alignnone" title="technicalramblings!" src="https://img.shields.io/badge/blog-technicalramblings.com-informational.svg?style=for-the-badge" alt="" height="37" />
+</a>
+<a href="https://hub.docker.com/r/gilbn/lsio-docker-mods" rel="noopener"><img alt="Docker Cloud Build Status" src="https://img.shields.io/docker/cloud/build/gilbn/lsio-docker-mods?style=for-the-badge&logo=docker" height="37">
+</a>
+<br />
+<br />
+
 A docker mod for the linuxserver/letsencrypt container adding a python script to send geo location metrics to InfluxDB
 
 Adapted source: https://github.com/ratibor78/geostat
 
-![](https://i.imgur.com/YCaxwsE.jpg)
+![](https://i.imgur.com/mh0IhYA.jpg)
 
 The mod will parse the access log for IPs and and convert them into geo metrics for InfluxDB. It will also send log metrics if enabled.
 
