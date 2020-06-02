@@ -52,12 +52,12 @@ def regex_tester(log_path, N):
             if re_ipv4.match(line):
                 regex = re.compile(r'(?P<ipaddress>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}) - (?P<remote_user>.+) \[(?P<dateandtime>\d{2}\/[A-Z]{1}[a-z]{2}\/\d{4}:\d{2}:\d{2}:\d{2} ((\+|\-)\d{4}))\](["](?P<method>[A-Z]{1,7})) (?P<referrer>.+) ((?P<http_version>HTTP\/[1-3]\.[0-9])["]) (?P<status_code>\d{3}) (?P<bytes_sent>\d{1,99})(["](?P<url>(\-)|(.+))["]) (["](?P<user_agent>.+)["])(["](?P<request_time>.+)["]) (["](?P<connect_time>.+)["])(["](?P<city>.+)["]) (["](?P<country_code>.+)["])', re.IGNORECASE) # NOQA
                 if regex.match(line):
-                    logging.info("Regex is matching %s continuing..." % log_path)          
+                    logging.debug("Regex is matching %s continuing..." % log_path)          
                     return True
             elif re_ipv6.match(line):
                 regex = re.compile(r'(?P<ipaddress>(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))) - (?P<remote_user>.+) \[(?P<dateandtime>\d{2}\/[A-Z]{1}[a-z]{2}\/\d{4}:\d{2}:\d{2}:\d{2} ((\+|\-)\d{4}))\](["](?P<method>[A-Z]{1,7})) (?P<referrer>.+) ((?P<http_version>HTTP\/[1-3]\.[0-9])["]) (?P<status_code>\d{3}) (?P<bytes_sent>\d{1,99})(["](?P<url>(\-)|(.+))["]) (["](?P<user_agent>.+)["])(["](?P<request_time>.+)["]) (["](?P<connect_time>.+)["])(["](?P<city>.+)["]) (["](?P<country_code>.+)["])', re.IGNORECASE) # NOQA
                 if regex.match(line):
-                    logging.info("Regex is matching %s continuing..." % log_path)  
+                    logging.debug("Regex is matching %s continuing..." % log_path)  
                     return True
             else:
                 logging.info("Testing regex on: %s " % log_path)
@@ -79,7 +79,7 @@ def file_exists(log_path,geoip_db_path):
             time.sleep(1)
         if all([os.path.isfile(f) for f in file_list]):
             for f in file_list:
-                logging.info("Found: %s" % f)
+                logging.debug("Found: %s" % f)
             return True
         if time.time() > time_out:
             if not os.path.exists(geoip_db_path) and not os.path.exists(log_path):
@@ -179,8 +179,7 @@ def logparse(
                         ips['measurement'] = geo_measurement
                         geo_metrics.append(ips)
                         client.write_points(geo_metrics)
-                        logging.debug(str(geo_metrics))
-                        logging.debug("Sent geoip2 metrics")
+                        logging.debug("Geo metrics: " + str(geo_metrics))
                         
                 if send_logs:
                     data = re.search(log, line)
@@ -215,8 +214,7 @@ def logparse(
                     nginx_log['measurement'] = log_measurement
                     log_metrics.append(nginx_log)
                     client.write_points(log_metrics)
-                    logging.debug(str(log_metrics))
-                    logging.debug("Sent NGINX log metrics")
+                    logging.debug("NGINX log metrics: " + str(log_metrics))
 
 
 def main():
