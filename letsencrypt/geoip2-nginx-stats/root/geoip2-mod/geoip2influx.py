@@ -32,19 +32,19 @@ from IPy import IP as ipadd
 
 
 # Getting params from envs
-geoip_db_path = '/home/unraid/docker/docker/letsencrypt/geoip2db/GeoLite2-City.mmdb'
-log_path = env.get('NGINX_LOG_PATH', '/home/unraid/docker/docker/letsencrypt/log/nginx/technicalramblings/access.log')
-influxdb_host = env.get('INFLUX_HOST', '192.168.1.34')
-influxdb_port = env.get('INFLUX_HOST_PORT', '8082')
-influxdb_database = env.get('INFLUX_DATABASE', 'geoinflux2')
-influxdb_user = env.get('INFLUX_USER', 'marius')
-influxdb_user_pass = env.get('INFLUX_PASS', 'marius')
+geoip_db_path = '/config/geoip2db/GeoLite2-City.mmdb'
+log_path = env.get('NGINX_LOG_PATH', '/config/log/nginx/access.log')
+influxdb_host = env.get('INFLUX_HOST', 'localhost')
+influxdb_port = env.get('INFLUX_HOST_PORT', '8086')
+influxdb_database = env.get('INFLUX_DATABASE', 'geoip2influx')
+influxdb_user = env.get('INFLUX_USER', 'root')
+influxdb_user_pass = env.get('INFLUX_PASS', 'root')
 influxdb_retention = env.get('INFLUX_RETENTION','30d')
 influxdb_shard = env.get('INFLUX_SHARD', '2d')
 geo_measurement = env.get('GEO_MEASUREMENT', 'geoip2influx')
 log_measurement = env.get('LOG_MEASUREMENT', 'nginx_access_logs')
 send_nginx_logs = env.get('SEND_NGINX_LOGS','true')
-log_level = env.get('GEOIP2INFLUX_LOG_LEVEL', 'debug').upper()
+log_level = env.get('GEOIP2INFLUX_LOG_LEVEL', 'info').upper()
 
 # Logging
 logging.basicConfig(level=log_level,format='%(asctime)s :: %(levelname)s :: %(message)s',datefmt='%d/%b/%Y %H:%M:%S',filename=path[0] + '/geoip2influx.log')
