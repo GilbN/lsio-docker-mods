@@ -83,8 +83,12 @@ log_format custom '$remote_addr - $remote_user [$time_local]'
  ```
 
 #### Updates 
-06.06.20 - Added influxdb retention policy. See https://github.com/gilbN/lsio-docker-mods/pull/3
+**06.06.20** - Added influx retention policy to try and mitigate max-values-per-tag limit exceeded errors.
 
-30.05.20 - Added logging. Use `-e GEOIP2INFLUX_LOG_LEVEL` to set the log level.
+  * `-e INFLUX_RETENTION` Default 30d
+  * `-e INFLUX_SHARD` Default 2d
+  * It will only add the retention policy if the database doesn't exist.
 
-15.05.20 - Removed `GEOIP2_KEY` and `GEOIP_DB_PATH`variables. With commit https://github.com/linuxserver/docker-letsencrypt/commit/75b9685fdb3ec6edda590300f289b0e75dd9efd0 the letsencrypt container now natively supports downloading and updating(weekly) the GeoLite2-City database!
+**30.05.20** - Added logging. Use `-e GEOIP2INFLUX_LOG_LEVEL` to set the log level.
+
+**15.05.20** - Removed `GEOIP2_KEY` and `GEOIP_DB_PATH`variables. With commit https://github.com/linuxserver/docker-letsencrypt/commit/75b9685fdb3ec6edda590300f289b0e75dd9efd0 the letsencrypt container now natively supports downloading and updating(weekly) the GeoLite2-City database!
