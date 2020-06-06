@@ -36,6 +36,8 @@ Add the ones that differ on your system.
 -e LOG_MEASUREMENT=nginx_access_logs \ # InfluxDB measurement name for nginx logs
 -e SEND_NGINX_LOGS=true \
 -e GEOIP2INFLUX_LOG_LEVEL=INFO \ # Set to debug for debugging..
+-e INFLUX_RETENTION=30d
+-e INFLUX_SHARD=2d
 
  ```
 ### MaxMind Geolite2
@@ -81,6 +83,8 @@ log_format custom '$remote_addr - $remote_user [$time_local]'
  ```
 
 #### Updates 
+06.06.20 - Added influxdb retention policy. See https://github.com/gilbN/lsio-docker-mods/pull/3
+
 30.05.20 - Added logging. Use `-e GEOIP2INFLUX_LOG_LEVEL` to set the log level.
 
 15.05.20 - Removed `GEOIP2_KEY` and `GEOIP_DB_PATH`variables. With commit https://github.com/linuxserver/docker-letsencrypt/commit/75b9685fdb3ec6edda590300f289b0e75dd9efd0 the letsencrypt container now natively supports downloading and updating(weekly) the GeoLite2-City database!
