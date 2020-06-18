@@ -16,7 +16,8 @@
     # Adapted to geoip2.
 
 from os.path import exists, isfile
-from os import uname, environ as env, stat
+from os import environ as env, stat
+from platform import uname
 from re import compile, match, search, IGNORECASE
 from sys import path, exit
 from time import sleep, time
