@@ -240,6 +240,7 @@ def logparse(
 
                 if send_logs:
                     data = search(log, line)
+                    info = gi.city(ip)
                     datadict = data.groupdict()
                     log_data_fields['count'] = 1
                     log_data_fields['bytes_sent'] = int(datadict['bytes_sent'])
@@ -262,6 +263,7 @@ def logparse(
                     log_data_tags['connect_time'] = datadict['connect_time']
                     log_data_tags['city'] = datadict['city']
                     log_data_tags['country_code'] = datadict['country_code']
+                    log_data_tags['country_name'] = info.country.name
                     nginx_log['tags'] = log_data_tags
                     nginx_log['fields'] = log_data_fields
                     nginx_log['measurement'] = log_measurement
