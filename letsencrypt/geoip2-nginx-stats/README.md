@@ -98,8 +98,9 @@ This will log the same lines to both files.
 
 Then use the `/config/log/nginx/access.log` file in the `NGINX_LOG_PATH` variable. 
 
+***
 
-#### Updates 
+## Updates 
 **06.06.20** - Added influx retention policy to try and mitigate max-values-per-tag limit exceeded errors.
 
   * `-e INFLUX_RETENTION` Default 30d
