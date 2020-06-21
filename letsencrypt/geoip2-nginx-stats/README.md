@@ -55,11 +55,14 @@ The InfluxDB database will be created automatically with the name you choose.
 ```
 -e INFLUX_DATABASE=geoip2influx 
 ```
+***
 
 ## Grafana dashboard: 
 ### [Grafana Dashboard Link](https://grafana.com/grafana/dashboards/12268/)
 
-### Sending Nginx log metrics
+***
+
+## Sending Nginx log metrics
 
 1. Add the following to the http block in your `nginx.conf`file:
 
