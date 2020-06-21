@@ -17,6 +17,8 @@ Adapted source: https://github.com/ratibor78/geostat
 
 ![](https://i.imgur.com/mh0IhYA.jpg)
 
+### **! Check [Update 21.06.20](/geoip2-nginx-stats#updates) if nginx logs stopped working.**
+
 The mod will parse the access log for IPs and and convert them into geo metrics for InfluxDB. It will also send log metrics if enabled.
 
 Add `-e DOCKER_MODS=gilbn/lsio-docker-mods:geoip2-nginx-stats`
@@ -75,7 +77,7 @@ $geoip2_data_city_name city names en;
 
 log_format custom '$remote_addr - $remote_user [$time_local]'
            '"$request" $status $body_bytes_sent'
-           '"$http_referer" "$http_user_agent"'
+           '"$http_referer" $host "$http_user_agent"'
            '"$request_time" "$upstream_connect_time"'
            '"$geoip2_data_city_name" "$geoip2_data_country_code"';
  ```
@@ -104,6 +106,9 @@ Then use the `/config/log/nginx/access.log` file in the `NGINX_LOG_PATH` variabl
 ***
 
 ## Updates 
+
+**21.06.20** - Added $host(domain) to the nginx log metrics. This will break your nginx logs parsing, as you need to update the custom log format.
+
 **06.06.20** - Added influx retention policy to try and mitigate max-values-per-tag limit exceeded errors.
 
   * `-e INFLUX_RETENTION` Default 30d
