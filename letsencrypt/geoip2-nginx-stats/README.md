@@ -84,7 +84,8 @@ log_format custom '$remote_addr - $remote_user [$time_local]'
 
 ### Multiple log files
 
-If you separate you nginx log files but want this mod to parse all of them you can do the following.
+If you separate you nginx log files but want this mod to parse all of them you can do the following:
+
 As nginx can have multiple `access log` directives in a block, just add another one in the server block. 
 
 **Example**
