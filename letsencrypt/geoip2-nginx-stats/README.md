@@ -82,6 +82,22 @@ log_format custom '$remote_addr - $remote_user [$time_local]'
  access_log /config/log/nginx/access.log custom;
  ```
 
+### Multiple log files
+
+If you separate you nginx log files but want this mod to parse all of them you can do the following.
+As nginx can have multiple `access log` directives in a block, just add another one in the server block. 
+
+**Example**
+
+```nginx
+	access_log /config/log/nginx/technicalramblings/access.log custom;
+	access_log /config/log/nginx/access.log custom;
+```
+This will log the same lines to both files.
+
+Then use the `/config/log/nginx/access.log` file in the `NGINX_LOG_PATH` variable. 
+
+
 #### Updates 
 **06.06.20** - Added influx retention policy to try and mitigate max-values-per-tag limit exceeded errors.
 
