@@ -17,6 +17,8 @@ Adapted source: https://github.com/ratibor78/geostat
 
 ![](https://i.imgur.com/mh0IhYA.jpg)
 
+For the standalone container click here: https://github.com/gilbN/geoip2influx
+
 ### **! Check [Update 21.06.20](https://github.com/gilbN/lsio-docker-mods/tree/master/letsencrypt/geoip2-nginx-stats#updates) if nginx logs stopped working.**
 
 The mod will parse the access log for IPs and and convert them into geo metrics for InfluxDB. It will also send log metrics if enabled.
