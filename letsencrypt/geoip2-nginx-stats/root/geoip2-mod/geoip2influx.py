@@ -242,44 +242,42 @@ def logparse(
                     data = search(log, line)
                     if ipadd(ip).iptype() == 'PUBLIC' and ip:
                         info = gi.city(ip)
-                        country_name = info.country.name
-                    else:
-                        country_name = "No data"
-                    datadict = data.groupdict()
-                    log_data_fields['count'] = 1
-                    log_data_fields['bytes_sent'] = int(datadict['bytes_sent'])
-                    log_data_fields['request_time'] = float(datadict['request_time'])
-                    if datadict['connect_time'] == '-':
-                        log_data_fields['connect_time'] = 0.0
-                    else:
-                        log_data_fields['connect_time'] = float(datadict['connect_time'])
-                    log_data_tags['ip'] = datadict['ipaddress']
-                    log_data_tags['datetime'] = datetime.strptime(datadict['dateandtime'], '%d/%b/%Y:%H:%M:%S %z')
-                    log_data_tags['remote_user'] = datadict['remote_user']
-                    log_data_tags['method'] = datadict['method']
-                    log_data_tags['referrer'] = datadict['referrer']
-                    log_data_tags['host'] = datadict['host']
-                    log_data_tags['http_version'] = datadict['http_version']
-                    log_data_tags['status_code'] = datadict['status_code']
-                    log_data_tags['bytes_sent'] = datadict['bytes_sent']
-                    log_data_tags['url'] = datadict['url']
-                    log_data_tags['user_agent'] = datadict['user_agent']
-                    log_data_tags['request_time'] = datadict['request_time']
-                    log_data_tags['connect_time'] = datadict['connect_time']
-                    log_data_tags['city'] = datadict['city']
-                    log_data_tags['country_code'] = datadict['country_code']
-                    log_data_tags['country_name'] = country_name
-                    nginx_log['tags'] = log_data_tags
-                    nginx_log['fields'] = log_data_fields
-                    nginx_log['measurement'] = log_measurement
-                    log_metrics.append(nginx_log)
-                    logging.debug('NGINX log metrics: %s' % log_metrics)
-                    try:
-                        client.write_points(log_metrics)
-                    except (InfluxDBServerError, InfluxDBClientError, ConnectionError) as e:
-                        logging.error('Error writing data to InfluxDB! Check your database!\n'
-                                      'Error: %s' % e
-                                     )
+                        if info is not None:
+                            datadict = data.groupdict()
+                            log_data_fields['count'] = 1
+                            log_data_fields['bytes_sent'] = int(datadict['bytes_sent'])
+                            log_data_fields['request_time'] = float(datadict['request_time'])
+                            if datadict['connect_time'] == '-':
+                                log_data_fields['connect_time'] = 0.0
+                            else:
+                                log_data_fields['connect_time'] = float(datadict['connect_time'])
+                            log_data_tags['ip'] = datadict['ipaddress']
+                            log_data_tags['datetime'] = datetime.strptime(datadict['dateandtime'], '%d/%b/%Y:%H:%M:%S %z')
+                            log_data_tags['remote_user'] = datadict['remote_user']
+                            log_data_tags['method'] = datadict['method']
+                            log_data_tags['referrer'] = datadict['referrer']
+                            log_data_tags['host'] = datadict['host']
+                            log_data_tags['http_version'] = datadict['http_version']
+                            log_data_tags['status_code'] = datadict['status_code']
+                            log_data_tags['bytes_sent'] = datadict['bytes_sent']
+                            log_data_tags['url'] = datadict['url']
+                            log_data_tags['user_agent'] = datadict['user_agent']
+                            log_data_tags['request_time'] = datadict['request_time']
+                            log_data_tags['connect_time'] = datadict['connect_time']
+                            log_data_tags['city'] = datadict['city']
+                            log_data_tags['country_code'] = datadict['country_code']
+                            log_data_tags['country_name'] = info.country.name
+                            nginx_log['tags'] = log_data_tags
+                            nginx_log['fields'] = log_data_fields
+                            nginx_log['measurement'] = log_measurement
+                            log_metrics.append(nginx_log)
+                            logging.debug('NGINX log metrics: %s' % log_metrics)
+                            try:
+                                client.write_points(log_metrics)
+                            except (InfluxDBServerError, InfluxDBClientError, ConnectionError) as e:
+                                logging.error('Error writing data to InfluxDB! Check your database!\n'
+                                            'Error: %s' % e
+                                            )
 
 
 def main():
