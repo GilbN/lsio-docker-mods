@@ -13,11 +13,10 @@
 
 A docker mod for the linuxserver/letsencrypt container adding a python script to send geo location metrics to InfluxDB
 
-Adapted source: https://github.com/ratibor78/geostat
-
 ![](https://i.imgur.com/mh0IhYA.jpg)
 
-For the standalone container click here: https://github.com/gilbN/geoip2influx
+
+### For the standalone container click here: https://github.com/gilbN/geoip2influx
 
 ### **! Check [Update 21.06.20](https://github.com/gilbN/lsio-docker-mods/tree/master/letsencrypt/geoip2-nginx-stats#updates) if nginx logs stopped working.**
 
@@ -120,3 +119,6 @@ Then use the `/config/log/nginx/access.log` file in the `NGINX_LOG_PATH` variabl
 **30.05.20** - Added logging. Use `-e GEOIP2INFLUX_LOG_LEVEL` to set the log level.
 
 **15.05.20** - Removed `GEOIP2_KEY` and `GEOIP_DB_PATH`variables. With commit https://github.com/linuxserver/docker-letsencrypt/commit/75b9685fdb3ec6edda590300f289b0e75dd9efd0 the letsencrypt container now natively supports downloading and updating(weekly) the GeoLite2-City database!
+
+***
+Adapted source: https://github.com/ratibor78/geostat
