@@ -35,7 +35,7 @@ elif [[ -d geoip2influx/.git ]]; then
   echo '-------------------------'
   cd geoip2influx/
   git pull
-  cp geoip2influx/geoip2influx.py /config/geoip2db/
+  cp geoip2influx.py /config/geoip2db/
   chown -R abc:abc /config/geoip2db
   chmod +x /config/geoip2db/geoip2influx.py
 fi
