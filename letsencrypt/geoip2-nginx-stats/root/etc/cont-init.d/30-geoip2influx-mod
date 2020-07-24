@@ -6,7 +6,7 @@ if [ ! -d /usr/lib/python3.8/site-packages/influxdb ]; then
   echo '| Running installation of required modules for Geoip2Influx |'
   echo '-------------------------------------------------------------'
   pip3 install --no-cache-dir -U \
-    geoip2 \
+    geoip2==3.0.0 \
     geohash2 \
     influxdb \
     IPy 
