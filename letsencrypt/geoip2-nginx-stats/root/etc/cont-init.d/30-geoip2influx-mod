@@ -7,9 +7,9 @@ if [ ! -d /usr/lib/python3.8/site-packages/influxdb ]; then
   echo '-------------------------------------------------------------'
   pip3 install --no-cache-dir -U \
     geoip2==3.0.0 \
-    geohash2 \
-    influxdb \
-    IPy 
+    geohash2==1.1 \
+    influxdb==5.3.0 \
+    IPy==1.0
 fi
 
 if [ ! -d /config/geoip2db ]; then
