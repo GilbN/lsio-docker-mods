@@ -1,5 +1,5 @@
 /config/geoip2db/geoip2influx.log {
- weekly
+ daily
  rotate 7
  size 25M
  compress
