@@ -1,5 +1,9 @@
 # Geoip2Influx
 
+## The mod has now been added to the linuxserver/docker-mods repo
+https://github.com/linuxserver/docker-mods/tree/swag-geoip2influx
+
+### For the standalone container click here: https://github.com/gilbN/geoip2influx
 <p align="center"></a>
 
 <a href="https://discord.gg/HSPa4cz" rel="noopener"><img class="alignnone" title="Geoip2Influx!" src="https://img.shields.io/badge/chat-Discord-blue.svg?style=for-the-badge&logo=discord" alt="" height="37" />
@@ -14,9 +18,6 @@
 A docker mod for the linuxserver/letsencrypt container adding a python script to send geo location metrics to InfluxDB
 
 ![](https://i.imgur.com/mh0IhYA.jpg)
-
-
-### For the standalone container click here: https://github.com/gilbN/geoip2influx
 
 ### **! Check [Update 21.06.20](https://github.com/gilbN/lsio-docker-mods/tree/master/letsencrypt/geoip2-nginx-stats#updates) if nginx logs stopped working.**
 
