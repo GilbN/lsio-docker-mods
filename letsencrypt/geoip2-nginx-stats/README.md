@@ -40,7 +40,7 @@ Add the ones that differ on your system.
 -e LOG_MEASUREMENT=nginx_access_logs \ # InfluxDB measurement name for nginx logs
 -e SEND_NGINX_LOGS=true \
 -e GEOIP2INFLUX_LOG_LEVEL=INFO \ # Set to debug for debugging..
--e INFLUX_RETENTION=30d
+-e INFLUX_RETENTION=7d
 -e INFLUX_SHARD=2d
 
  ```
