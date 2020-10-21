@@ -25,23 +25,27 @@ The mod will parse the access log for IPs and and convert them into geo metrics 
 
 Add `-e DOCKER_MODS=gilbn/lsio-docker-mods:geoip2-nginx-stats`
 
-## Enviroment variables:
+### Enviroment variables:
 
 These are the **default** values for all envs. 
 Add the ones that differ on your system. 
-```
--e NGINX_LOG_PATH=/config/log/nginx/access.log \
--e INFLUX_HOST=localhost \
--e INFLUX_HOST_PORT=8086 \
--e INFLUX_DATABASE=geoip2influx \
--e INFLUX_USER=root \
--e INFLUX_PASS=root \
--e GEO_MEASUREMENT=geoip2influx \ # InfluxDB measurement name for geohashes
--e LOG_MEASUREMENT=nginx_access_logs \ # InfluxDB measurement name for nginx logs
--e SEND_NGINX_LOGS=true \
--e GEOIP2INFLUX_LOG_LEVEL=INFO \ # Set to debug for debugging..
--e INFLUX_RETENTION=7d
--e INFLUX_SHARD=2d
+
+| Environment Variable | Example Value | Description |
+| -------------------- | ------------- | ----------- |
+| NGINX_LOG_PATH | /config/log/nginx/access.log | Container path for Nginx logfile , defaults to the example. |
+| INFLUX_HOST | localhost | Host running InfluxDB. |
+| INFLUX_HOST_PORT | 8086 | Optional, defaults to 8086. |
+| INFLUX_DATABASE | geoip2influx | Optional, defaults to geoip2influx. |
+| INFLUX_USER | root | Optional, defaults to root. |
+| INFLUX_PASS | root | Optional, defaults to root. |
+| GEO_MEASUREMENT | geoip2influx | InfluxDB measurement name for geohashes. Optional, defaults to the example. |
+| LOG_MEASUREMENT | nginx_access_logs | InfluxDB measurement name for nginx logs. Optional, defaults to the example. |
+| SEND_NGINX_LOGS | true | Set to `false` to disable nginx logs. Optional, defaults to `true`. |
+| GEOIP2INFLUX_LOG_LEVEL | info | Sets the log level in geoip2influx.log. Use `debug` for verbose logging Optional, defaults to info. |
+| GEOIP2INFLUX_LOG_PATH | /config/log/geoip2influx/geoip2influx.log | Optional. Defaults to example. |
+| INFLUX_RETENTION | 7d | Sets the retention for the database. Optional, defaults to example.|
+| INFLUX_SHARD | 1d | Set the shard for the database. Optional, defaults to example. |
+| MAXMINDDB_LICENSE_KEY | xxxxxxx | Add your Maxmind licence key |
 
  ```
 ### MaxMind Geolite2
