@@ -77,7 +77,7 @@ The InfluxDB database will be created automatically with the name you choose.
 ```nginx
 geoip2 /config/geoip2db/GeoLite2-City.mmdb {
 auto_reload 5m;
-$geoip2_data_country_code country iso_code;
+$geoip2_data_country_iso_code country iso_code;
 $geoip2_data_city_name city names en;
 }
 
@@ -85,7 +85,7 @@ log_format custom '$remote_addr - $remote_user [$time_local]'
            '"$request" $status $body_bytes_sent'
            '"$http_referer" $host "$http_user_agent"'
            '"$request_time" "$upstream_connect_time"'
-           '"$geoip2_data_city_name" "$geoip2_data_country_code"';
+           '"$geoip2_data_city_name" "$geoip2_data_country_iso_code"';
  ```
  
  2. Set the access log use the `custom` log format. 
