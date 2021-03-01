@@ -58,6 +58,8 @@ Default download location is `/config/geoip2db/GeoLite2-City.mmdb`
 
 ### InfluxDB 
 
+#### InfluxDB v2.x is not supported. Use v1.8x.
+
 The InfluxDB database will be created automatically with the name you choose.
 
 ```
