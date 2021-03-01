@@ -30,6 +30,7 @@ Add `-e DOCKER_MODS=gilbn/lsio-docker-mods:geoip2-nginx-stats`
 These are the **default** values for all envs. 
 Add the ones that differ on your system. 
 
+
 | Environment Variable | Example Value | Description |
 | -------------------- | ------------- | ----------- |
 | NGINX_LOG_PATH | /config/log/nginx/access.log | Container path for Nginx logfile , defaults to the example. |
@@ -46,14 +47,16 @@ Add the ones that differ on your system.
 | INFLUX_RETENTION | 7d | Sets the retention for the database. Optional, defaults to example.|
 | INFLUX_SHARD | 1d | Set the shard for the database. Optional, defaults to example. |
 | MAXMINDDB_LICENSE_KEY | xxxxxxx | Add your Maxmind licence key |
-
- ```
+ 
+ 
 ### MaxMind Geolite2
 
 Use: 
+
 ```
 -e MAXMINDDB_LICENSE_KEY=<license-key>
 ```
+	
 Default download location is `/config/geoip2db/GeoLite2-City.mmdb`
 
 ### InfluxDB 
@@ -65,12 +68,13 @@ The InfluxDB database will be created automatically with the name you choose.
 ```
 -e INFLUX_DATABASE=geoip2influx 
 ```
-***
+
+
 
 ## Grafana dashboard: 
+
 ### [Grafana Dashboard Link](https://grafana.com/grafana/dashboards/12268/)
 
-***
 
 ## Sending Nginx log metrics
 
@@ -90,7 +94,8 @@ log_format custom '$remote_addr - $remote_user [$time_local]'
            '"$geoip2_data_city_name" "$geoip2_data_country_iso_code"';
  ```
  
- 2. Set the access log use the `custom` log format. 
+ 2. Set the access log use the `custom` log format.
+  
  ```nginx
  access_log /config/log/nginx/access.log custom;
  ```
