@@ -7,7 +7,7 @@ pip3 install --no-cache-dir -U \
   geoip2==3.0.0 \
   geohash2==1.1 \
   influxdb==5.3.0 \
-  IPy==1.0
+  IPy==1.01
 
 # move old log if needed
 if [ -f /config/geoip2db/geoip2influx.log ]; then
